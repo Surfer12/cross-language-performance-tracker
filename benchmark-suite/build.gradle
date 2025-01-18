@@ -1,0 +1,94 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.benchmark'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.yaml:snakeyaml:2.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+application {
+    mainClass = 'com.benchmark.core.BenchmarkRunner'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Custom task to compile C code
+task compileCCode(type: Exec) {
+    workingDir 'src/c'
+    commandLine 'gcc', '-O3', '-march=native', '-pthread', 
+                'benchmark_runner.c', '-o', '../../build/benchmark_runner'
+}
+
+// Custom task to compile Mojo code (placeholder - adjust based on Mojo compiler)
+task compileMojoCode(type: Exec) {
+    workingDir 'src/mojo'
+    commandLine 'mojo', 'build', 'benchmark_runner.mojo', '-o', '../../build/benchmark_runner_mojo'
+}
+
+// Task to build all components
+task buildAll {
+    dependsOn 'build', 'compileCCode', 'compileMojoCode'
+}
+
+// Task to run benchmarks
+task runBenchmarks(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.benchmark.core.BenchmarkRunner'
+    args = ["src/common/config.yaml"]
+}
+
+// Configure source sets
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/java']
+        }
+        resources {
+            srcDirs = ['src/common']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['tests/java']
+        }
+    }
+}
+
+// Configure JAR
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'com.benchmark.core.BenchmarkRunner',
+            'Implementation-Title': 'Cross-Language Performance Benchmarking Tool',
+            'Implementation-Version': version
+        )
+    }
+    
+    // Include dependencies in the JAR
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+} 
