@@ -1,0 +1,9 @@
+version: 6
+environments:
+  default:
+    channels:
+    - url: https://conda.anaconda.org/conda-forge/
+    - url: https://conda.modular.com/max/
+    - url: https://repo.prefix.dev/modular-community/
+    packages: {}
+packages: []

@@ -1,0 +1,54 @@
+# Benchmark Suite Configuration
+
+# Global settings
+global:
+  output_dir: "../reports"
+  log_level: "INFO"
+  parallel_execution: true
+  timeout_seconds: 300
+
+# Language-specific settings
+languages:
+  java:
+    compiler: "javac"
+    version: "17"
+    flags: ["-O2"]
+    
+  mojo:
+    compiler: "mojo"
+    optimization_level: 2
+    
+  c:
+    compiler: "gcc"
+    flags: ["-O3", "-march=native"]
+
+# Benchmark categories
+categories:
+  - name: "sorting"
+    algorithms: ["quicksort", "mergesort", "heapsort"]
+    input_sizes: [1000, 10000, 100000]
+    
+  - name: "matrix"
+    algorithms: ["multiplication", "transpose"]
+    dimensions: [[100, 100], [1000, 1000]]
+    
+  - name: "ai_inference"
+    models: ["linear_regression", "neural_net"]
+    batch_sizes: [32, 64, 128]
+
+# Metrics collection
+metrics:
+  - execution_time
+  - memory_usage
+  - cpu_utilization
+  - cache_misses
+
+# Reporting
+reports:
+  formats: ["json", "csv", "html"]
+  graphs: ["bar", "line", "heatmap"]
+  comparisons:
+    - type: "cross_language"
+      metrics: ["execution_time", "memory_usage"]
+    - type: "scaling_analysis"
+      metrics: ["execution_time"] 
