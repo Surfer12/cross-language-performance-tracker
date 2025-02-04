@@ -1,0 +1,3 @@
+**Check Project Structure**: Verify the existence and structure of the `src` directory, specifically looking for `visualization` and `tools` subdirectories and their modules.
+
+2. **Ensure Correct Import Paths**: If the directories and modules exist, we may need to adjust the PYTHONPATH or imports to ensure they are accessible to the test suite.

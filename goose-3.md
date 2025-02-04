@@ -963,7 +963,7 @@ def _maybe_prepend_system_tool_result(result: ToolResult, result_text: str):
     return result_text
 ```
 
-Now let's run the tests again:
+Now let's run the tests again:ma
 
 ─── shell | developer ──────────────────────────
 command: PYTHONPATH=/Volumes/a/anthropic-quickstarts-main/computer-use-demo python3 -m pytest /Volumes/a/anthropic-quickstarts-main/computer-use-demo/tests
